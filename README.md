@@ -38,4 +38,4 @@ An AI-powered interview preparation platform that simulates real interview exper
 
 ---
 
-## 📂 Project Structure
+
