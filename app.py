@@ -15,30 +15,15 @@ if not firebase_admin._apps:
 
 db = firestore.client()
 db = firestore.client()
-# =========================
-# CONFIG
-# =========================
 load_dotenv()
 
-client = genai.Client(
-    api_key=os.getenv("GEMINI_API_KEY")
-)
-
-st.set_page_config(
-    page_title="AI Interview Coach",
-    page_icon="🎯",
-    layout="centered"
-)
-
-# =========================
-# FIREBASE INIT
-# =========================
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+st.set_page_config(page_title="AI Interview Coach",page_icon="🎯",layout="centered")
 if not firebase_admin._apps:
     cred = credentials.Certificate("firebase_key.json")
     firebase_admin.initialize_app(cred)
 
 db = firestore.client()
-
 def save_interview(role, question, answer, feedback):
     doc = {
         "role": role,
@@ -49,9 +34,6 @@ def save_interview(role, question, answer, feedback):
     }
     db.collection("interviews").add(doc)
 
-# =========================
-# CLEAN UI
-# =========================
 st.markdown(
     """
     <style>
@@ -75,24 +57,12 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-
-# =========================
-# HEADER
-# =========================
 st.title("🎯 AI Interview Coach")
 st.markdown("<p class='subtle'>Practice interviews, get AI feedback, and improve your skills.</p>", unsafe_allow_html=True)
 
-# =========================
-# ROLE
-# =========================
 role = st.selectbox(
     "Select Role",
-    ["Data Analyst", "Data Scientist", "Software Engineer", "Machine Learning Engineer"]
-)
-
-# =========================
-# 1. QUESTION GENERATION
-# =========================
+    ["Data Analyst", "Data Scientist", "Software Engineer", "Machine Learning Engineer"])
 st.divider()
 st.subheader("📌 Interview Questions")
 
@@ -114,16 +84,11 @@ if st.button("Generate Questions"):
         )
 
         st.markdown(f"<div class='card'>{response.text}</div>", unsafe_allow_html=True)
-
-# =========================
-# 2. MOCK INTERVIEW MODE
-# =========================
 st.divider()
 st.subheader("🧠 Mock Interview Mode")
 
 if "mock_question" not in st.session_state:
     st.session_state.mock_question = ""
-
 col1, col2 = st.columns([3, 1])
 
 with col1:
@@ -145,7 +110,6 @@ with col2:
     if st.button("🔄 Reset"):
         st.session_state.mock_question = ""
 
-# Show question
 if st.session_state.mock_question:
     st.markdown(
         f"""
@@ -203,7 +167,7 @@ if st.session_state.mock_question:
                 st.markdown("### 📊 Feedback")
                 st.markdown(f"<div class='card'>{feedback}</div>", unsafe_allow_html=True)
 
-                # SAVE TO FIREBASE
+            
                 save_interview(
                     role,
                     st.session_state.mock_question,
@@ -211,9 +175,6 @@ if st.session_state.mock_question:
                     feedback
                 )
 
-# =========================
-# 3. ROADMAP
-# =========================
 st.divider()
 st.subheader("🛤️ Learning Roadmap")
 
