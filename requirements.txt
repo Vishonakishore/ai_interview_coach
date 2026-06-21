@@ -2,3 +2,4 @@ streamlit
 google-generativeai
 firebase-admin
 python-dotenv
+google-genai
