@@ -12,7 +12,6 @@ import streamlit as st
 if not firebase_admin._apps:
     try:
         if "FIREBASE_KEY" in st.secrets:
-            # Cloud Environment
             firebase_json = st.secrets["FIREBASE_KEY"]
             firebase_config = json.loads(firebase_json)
             cred = credentials.Certificate(firebase_config)
